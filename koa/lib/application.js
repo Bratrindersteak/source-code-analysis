@@ -4,7 +4,7 @@
 /**
  * Module dependencies.
  */
-only
+
 const isGeneratorFunction = require('is-generator-function');
 const debug = require('debug')('koa:application');
 const onFinished = require('on-finished');

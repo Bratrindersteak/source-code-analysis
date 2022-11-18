@@ -50,7 +50,7 @@ module.exports = function isGeneratorFunction(fn) {
 		return str === '[object GeneratorFunction]';
 	}
 
-	// .
+	// 若没有 Object.getPrototypeOf 方法，则直接返回 false.
 	if (!getProto) {
 		return false;
 	}

@@ -43,16 +43,23 @@ var defer = typeof setImmediate === 'function'
 /**
  * Create a new connect server.
  *
- * @return {function}
+ * @returns {function} app 函数.
  * @public
  */
-
 function createServer() {
-  function app(req, res, next){ app.handle(req, res, next); }
+  function app(req, res, next){
+    app.handle(req, res, next);
+  }
+
+  // 将 proto 的属性挂到 app 函数上.
   merge(app, proto);
+
+  // 将 EventEmitter.prototype 的原型挂到 app 函数上.
   merge(app, EventEmitter.prototype);
+
   app.route = '/';
   app.stack = [];
+
   return app;
 }
 
@@ -69,10 +76,9 @@ function createServer() {
  *
  * @param {String|Function|Server} route, callback or server
  * @param {Function|Server} callback or server
- * @return {Server} for chaining
+ * @returns {Server} for chaining
  * @public
  */
-
 proto.use = function use(route, fn) {
   var handle = fn;
   var path = route;
@@ -115,7 +121,6 @@ proto.use = function use(route, fn) {
  *
  * @private
  */
-
 proto.handle = function handle(req, res, out) {
   var index = 0;
   var protohost = getProtohost(req.url) || '';
@@ -211,7 +216,6 @@ proto.handle = function handle(req, res, out) {
  * @return {http.Server}
  * @api public
  */
-
 proto.listen = function listen() {
   var server = http.createServer(this);
   return server.listen.apply(server, arguments);
@@ -221,7 +225,6 @@ proto.listen = function listen() {
  * Invoke a route handle.
  * @private
  */
-
 function call(handle, route, err, req, res, next) {
   var arity = handle.length;
   var error = err;
@@ -254,7 +257,6 @@ function call(handle, route, err, req, res, next) {
  * @param {Error} err
  * @private
  */
-
 function logerror(err) {
   if (env !== 'test') console.error(err.stack || err.toString());
 }
@@ -262,17 +264,20 @@ function logerror(err) {
 /**
  * Get get protocol + host for a URL.
  *
- * @param {string} url
+ * @param {string} url - .
+ * @returns {string|undefined} .
  * @private
  */
-
 function getProtohost(url) {
+  // 若 url 为空或者以 / 开头，则直接返回 undefined.
   if (url.length === 0 || url[0] === '/') {
     return undefined;
   }
 
-  var fqdnIndex = url.indexOf('://')
+  // url 匹配 :// 第一次出现的索引.
+  var fqdnIndex = url.indexOf('://');
 
+  // 若 url 中含有 :// 并且匹配的 :// 之前不含 ?，则截取包含 :// 在内之前的字符串返回，否则返回 undefined.
   return fqdnIndex !== -1 && url.lastIndexOf('?', fqdnIndex) === -1
     ? url.substr(0, url.indexOf('/', 3 + fqdnIndex))
     : undefined;

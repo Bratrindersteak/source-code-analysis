@@ -47,7 +47,7 @@ var defer = typeof setImmediate === 'function'
  * @public
  */
 function createServer() {
-  function app(req, res, next){
+  function app(req, res, next) {
     app.handle(req, res, next);
   }
 

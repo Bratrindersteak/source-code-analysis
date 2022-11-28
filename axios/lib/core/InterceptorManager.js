@@ -2,18 +2,23 @@
 
 import utils from './../utils.js';
 
+/**
+ * 拦截器管理器类.
+ */
 class InterceptorManager {
   constructor() {
+    // 存放拦截器的堆栈数组.
     this.handlers = [];
   }
 
   /**
-   * Add a new interceptor to the stack
+   * 向堆栈数组中添加一个新的拦截器.
    *
-   * @param {Function} fulfilled The function to handle `then` for a `Promise`
-   * @param {Function} rejected The function to handle `reject` for a `Promise`
+   * @param {Function} fulfilled - 处理 then 的函数.
+   * @param {Function} rejected - 处理 reject 的函数.
+   * @param {Object} options - .
    *
-   * @return {Number} An ID used to remove interceptor later
+   * @returns {Number} 拦截器在堆栈数组中的下标，用于删除拦截器使用.
    */
   use(fulfilled, rejected, options) {
     this.handlers.push({
@@ -22,15 +27,15 @@ class InterceptorManager {
       synchronous: options ? options.synchronous : false,
       runWhen: options ? options.runWhen : null
     });
+
+    // 返回拦截器在堆栈数组中的下标作为 ID.
     return this.handlers.length - 1;
   }
 
   /**
-   * Remove an interceptor from the stack
+   * 从堆栈数组中移除指定的拦截器.
    *
-   * @param {Number} id The ID that was returned by `use`
-   *
-   * @returns {Boolean} `true` if the interceptor was removed, `false` otherwise
+   * @param {Number} id 待移除拦截器的 ID.
    */
   eject(id) {
     if (this.handlers[id]) {
@@ -39,9 +44,7 @@ class InterceptorManager {
   }
 
   /**
-   * Clear all interceptors from the stack
-   *
-   * @returns {void}
+   * 清空拦截器堆栈数组.
    */
   clear() {
     if (this.handlers) {
@@ -50,14 +53,9 @@ class InterceptorManager {
   }
 
   /**
-   * Iterate over all the registered interceptors
+   * 遍历拦截器堆栈数组，将每个有效的拦截器作为参数传递给 fn 函数分别执行.
    *
-   * This method is particularly useful for skipping over any
-   * interceptors that may have become `null` calling `eject`.
-   *
-   * @param {Function} fn The function to call for each interceptor
-   *
-   * @returns {void}
+   * @param {Function} fn - The function to call for each interceptor.
    */
   forEach(fn) {
     utils.forEach(this.handlers, function forEachHandler(h) {

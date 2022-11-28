@@ -206,32 +206,24 @@ const isFormData = (thing) => {
 const isURLSearchParams = kindOfTest('URLSearchParams');
 
 /**
- * Trim excess whitespace off the beginning and end of a string
+ * 去除字符串两端的所有空格.
  *
- * @param {String} str The String to trim
+ * @param {string} str - 待处理的字符串.
  *
- * @returns {String} The String freed of excess whitespace
+ * @returns {string} 处理后的字符串.
  */
 const trim = (str) => str.trim ?
   str.trim() : str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
 
 /**
- * Iterate over an Array or an Object invoking a function for each item.
+ * 遍历一个对象或数组 obj，将值、健（索引）、原对象（数组）依次作为三个参数传入 fn 函数内执行.
  *
- * If `obj` is an Array callback will be called passing
- * the value, index, and complete array for each item.
- *
- * If 'obj' is an Object callback will be called passing
- * the value, key, and complete object for each property.
- *
- * @param {Object|Array} obj The object to iterate
- * @param {Function} fn The callback to invoke for each item
- *
- * @param {Boolean} [allOwnKeys = false]
- * @returns {any}
+ * @param {Object|Array} obj - 待遍历的对象或数组.
+ * @param {Function} fn - 回调函数.
+ * @param {Boolean} [allOwnKeys = false] - .
  */
-function forEach(obj, fn, {allOwnKeys = false} = {}) {
-  // Don't bother if no value provided
+function forEach(obj, fn, { allOwnKeys = false } = {}) {
+  // 无效 obj 校验.
   if (obj === null || typeof obj === 'undefined') {
     return;
   }
@@ -239,23 +231,23 @@ function forEach(obj, fn, {allOwnKeys = false} = {}) {
   let i;
   let l;
 
-  // Force an array if not already something iterable
+  // 将非对象非数组类型的 obj 强制转换为数组.
   if (typeof obj !== 'object') {
-    /*eslint no-param-reassign:0*/
     obj = [obj];
   }
 
   if (isArray(obj)) {
-    // Iterate over array values
+    // 如果 obj 是数组类型，则遍历数组，将 item、index、obj 依次作为参数传递给函数 fn 并执行.
     for (i = 0, l = obj.length; i < l; i++) {
       fn.call(null, obj[i], i, obj);
     }
   } else {
-    // Iterate over object keys
+    // 如果 obj 是对象类型，首先根据 allOwnKeys 参数来确定 keys 数组的值，allOwnKeys 默认为 false.
     const keys = allOwnKeys ? Object.getOwnPropertyNames(obj) : Object.keys(obj);
     const len = keys.length;
     let key;
 
+    // 然后遍历对象，将 value、key、obj 依次作为参数传递给函数 fn 并执行.
     for (i = 0; i < len; i++) {
       key = keys[i];
       fn.call(null, obj[key], key, obj);
@@ -331,14 +323,14 @@ function merge(/* obj1, obj2, obj3, ... */) {
  * @param {Boolean} [allOwnKeys]
  * @returns {Object} The resulting value of object a
  */
-const extend = (a, b, thisArg, {allOwnKeys}= {}) => {
+const extend = (a, b, thisArg, { allOwnKeys } = {}) => {
   forEach(b, (val, key) => {
     if (thisArg && isFunction(val)) {
       a[key] = bind(val, thisArg);
     } else {
       a[key] = val;
     }
-  }, {allOwnKeys});
+  }, { allOwnKeys });
   return a;
 }
 

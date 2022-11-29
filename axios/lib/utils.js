@@ -314,20 +314,23 @@ function merge(/* obj1, obj2, obj3, ... */) {
 }
 
 /**
- * Extends object a by mutably adding to it the properties of object b.
+ * 将对象 b 的属性拷贝到对象 a 上，若对象 a 属性名冲突，则会被对象 b 的属性覆盖.
  *
- * @param {Object} a The object to be extended
- * @param {Object} b The object to copy properties from
- * @param {Object} thisArg The object to bind function to
+ * @param {Object} a - 待扩展的对象.
+ * @param {Object} b - 被复制属性的对象.
+ * @param {Object} thisArg - 用于绑定函数的 this 上下文对象.
+ * @param {boolean} [allOwnKeys] - 指定是否只使用自身拥有的枚举或不可枚举属性的 keys.
  *
- * @param {Boolean} [allOwnKeys]
- * @returns {Object} The resulting value of object a
+ * @returns {Object} 扩展后的对象 a.
  */
 const extend = (a, b, thisArg, { allOwnKeys } = {}) => {
   forEach(b, (val, key) => {
     if (thisArg && isFunction(val)) {
+      // 若对象 b 的属性值为函数并且提供了 this 对象，
+      // 则将绑定了指定 this 的函数作为属性值赋值给对象 a.
       a[key] = bind(val, thisArg);
     } else {
+      // 否则就直接简单赋值.
       a[key] = val;
     }
   }, { allOwnKeys });
@@ -350,10 +353,10 @@ const stripBOM = (content) => {
 
 /**
  * Inherit the prototype methods from one constructor into another
- * @param {function} constructor
- * @param {function} superConstructor
- * @param {object} [props]
- * @param {object} [descriptors]
+ * @param {function} constructor - .
+ * @param {function} superConstructor - .
+ * @param {object} [props] - .
+ * @param {object} [descriptors] - .
  *
  * @returns {void}
  */
@@ -422,21 +425,34 @@ const endsWith = (str, searchString, position) => {
 
 
 /**
- * Returns new array from array like object or null if failed
+ * 将类数组对象转化为数组.
  *
- * @param {*} [thing]
+ * @param {Object} thing - 类数组对象.
  *
- * @returns {?Array}
+ * @returns {Array|Null} 新转化的数组.
  */
 const toArray = (thing) => {
+  // 若未传递有效参数，则直接返回 null.
   if (!thing) return null;
+
+  // 如果已经是数组类型了则直接返回原值.
   if (isArray(thing)) return thing;
+
+  // 声明类数组长度变量.
   let i = thing.length;
+
+  // 类数组对象具有 length 属性，所以 length 校验不合法的也直接返回 null.
   if (!isNumber(i)) return null;
+
+  // 创建一个长度相同的新空数组.
   const arr = new Array(i);
+
+  // 将类数组对象的值依次赋值给新数组.
   while (i-- > 0) {
     arr[i] = thing[i];
   }
+
+  // 返回新数组.
   return arr;
 }
 

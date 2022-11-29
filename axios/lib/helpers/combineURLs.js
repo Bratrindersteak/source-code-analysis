@@ -1,12 +1,13 @@
 'use strict';
 
 /**
- * Creates a new URL by combining the specified URLs
+ * 将 baseURL 与 relativeURL 拼接到一起, 拼接时处理好接口处的 '/'.
+ * 若 relativeURL 为空则直接返回 baseURL.
  *
- * @param {string} baseURL The base URL
- * @param {string} relativeURL The relative URL
+ * @param {String} baseURL - 前段 URL.
+ * @param {string} relativeURL - 后段 URL.
  *
- * @returns {string} The combined URL
+ * @returns {string} 合并后的 URL.
  */
 export default function combineURLs(baseURL, relativeURL) {
   return relativeURL

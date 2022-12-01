@@ -181,6 +181,13 @@ class Axios {
     /* --- 全同步请求拦截器的处理 end --- */
   }
 
+  /**
+   *
+   *
+   * @param config - .
+   *
+   * @returns {string|*} .
+   */
   getUri(config) {
     config = mergeConfig(this.defaults, config);
     const fullPath = buildFullPath(config.baseURL, config.url);

@@ -9,7 +9,7 @@ import platform from '../platform/index.js';
 import formDataToJSON from '../helpers/formDataToJSON.js';
 
 const DEFAULT_CONTENT_TYPE = {
-  'Content-Type': undefined
+  'Content-Type': undefined,
 };
 
 /**
@@ -88,14 +88,14 @@ const defaults = {
         const _FormData = this.env && this.env.FormData;
 
         return toFormData(
-          isFileList ? {'files[]': data} : data,
+          isFileList ? { 'files[]': data } : data,
           _FormData && new _FormData(),
-          this.formSerializer
+          this.formSerializer,
         );
       }
     }
 
-    if (isObjectPayload || hasJSONContentType ) {
+    if (isObjectPayload || hasJSONContentType) {
       headers.setContentType('application/json', false);
       return stringifySafely(data);
     }
@@ -141,7 +141,7 @@ const defaults = {
 
   env: {
     FormData: platform.classes.FormData,
-    Blob: platform.classes.Blob
+    Blob: platform.classes.Blob,
   },
 
   validateStatus: function validateStatus(status) {
@@ -150,9 +150,9 @@ const defaults = {
 
   headers: {
     common: {
-      'Accept': 'application/json, text/plain, */*'
-    }
-  }
+      'Accept': 'application/json, text/plain, */*',
+    },
+  },
 };
 
 utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {

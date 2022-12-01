@@ -5,7 +5,7 @@ import AxiosError from "../core/AxiosError.js";
 
 const knownAdapters = {
   http: httpAdapter,
-  xhr: xhrAdapter
+  xhr: xhrAdapter,
 }
 
 utils.forEach(knownAdapters, (fn, value) => {
@@ -55,5 +55,5 @@ export default {
 
     return adapter;
   },
-  adapters: knownAdapters
+  adapters: knownAdapters,
 }

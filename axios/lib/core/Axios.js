@@ -21,20 +21,23 @@ const validators = validator.validators;
  */
 class Axios {
   constructor(instanceConfig) {
+    // 初始化默认配置对象.
     this.defaults = instanceConfig;
+
+    // 初始化拦截器对象.
     this.interceptors = {
       request: new InterceptorManager(),
-      response: new InterceptorManager()
+      response: new InterceptorManager(),
     };
   }
 
   /**
-   * Dispatch a request
+   * 发送请求.
    *
-   * @param {String|Object} configOrUrl The config specific for this request (merged with this.defaults)
-   * @param {?Object} config
+   * @param {String|Object} configOrUrl - URL字段或者配置对象.
+   * @param {Object} [config] - 配置对象.
    *
-   * @returns {Promise} The Promise to be fulfilled
+   * @returns {Promise} 经拦截器处理过的 Promise 函数.
    */
   request(configOrUrl, config) {
     /* --- 参数处理 start --- */
@@ -58,14 +61,14 @@ class Axios {
       validator.assertOptions(transitional, {
         silentJSONParsing: validators.transitional(validators.boolean),
         forcedJSONParsing: validators.transitional(validators.boolean),
-        clarifyTimeoutError: validators.transitional(validators.boolean)
+        clarifyTimeoutError: validators.transitional(validators.boolean),
       }, false);
     }
 
     if (paramsSerializer !== undefined) {
       validator.assertOptions(paramsSerializer, {
         encode: validators.function,
-        serialize: validators.function
+        serialize: validators.function,
       }, true);
     }
     /* --- end --- */

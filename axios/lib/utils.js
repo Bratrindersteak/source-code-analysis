@@ -274,28 +274,20 @@ const _global = typeof self === "undefined" ? typeof global === "undefined" ? th
 const isContextDefined = (context) => !isUndefined(context) && context !== _global;
 
 /**
- * Accepts varargs expecting each argument to be an object, then
- * immutably merges the properties of each object and returns result.
+ * 合并若干个对象为一个新对象并返回，若存在同名属性，后传入的覆盖先传入的.
  *
- * When multiple objects contain the same key the later object in
- * the arguments list will take precedence.
+ * @param {Object} obj1 - 待合并的对象.
  *
- * Example:
- *
- * ```js
- * var result = merge({foo: 123}, {foo: 456});
- * console.log(result.foo); // outputs 456
- * ```
- *
- * @param {Object} obj1 Object to merge
- *
- * @returns {Object} Result of all merge properties
+ * @returns {Object} 合并后的新对象.
  */
 function merge(/* obj1, obj2, obj3, ... */) {
-  const {caseless} = isContextDefined(this) && this || {};
+  const { caseless } = isContextDefined(this) && this || {};
+
   const result = {};
+
   const assignValue = (val, key) => {
     const targetKey = caseless && findKey(result, key) || key;
+
     if (isPlainObject(result[targetKey]) && isPlainObject(val)) {
       result[targetKey] = merge(result[targetKey], val);
     } else if (isPlainObject(val)) {
@@ -307,9 +299,12 @@ function merge(/* obj1, obj2, obj3, ... */) {
     }
   }
 
+  // 遍历传入的对象，依次执行 assignValue 回调函数.
   for (let i = 0, l = arguments.length; i < l; i++) {
     arguments[i] && forEach(arguments[i], assignValue);
   }
+
+  // 返回合并后的新对象.
   return result;
 }
 

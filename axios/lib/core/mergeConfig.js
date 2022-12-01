@@ -6,17 +6,16 @@ import AxiosHeaders from "./AxiosHeaders.js";
 const headersToObject = (thing) => thing instanceof AxiosHeaders ? thing.toJSON() : thing;
 
 /**
- * Config-specific merge-function which creates a new config-object
- * by merging two configuration objects together.
+ * 合并两个配置对象.
  *
- * @param {Object} config1
- * @param {Object} config2
+ * @param {Object} config1 - 配置对象一.
+ * @param {Object} config2 - 配置对象二.
  *
- * @returns {Object} New object resulting from merging config2 to config1
+ * @returns {Object} New object resulting from merging config2 to config1.
  */
 export default function mergeConfig(config1, config2) {
-  // eslint-disable-next-line no-param-reassign
   config2 = config2 || {};
+
   const config = {};
 
   function getMergedValue(target, source, caseless) {

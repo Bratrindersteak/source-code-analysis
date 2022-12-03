@@ -6,27 +6,27 @@
 
 ```markdown
 - lib/
-  - adapters/ -- 适配器
-    - adapters.js
-    - http.js
-    - xhr.js
-  - cancel/
-    - CanceledError.js
-    - CancelToken.js
-    - isCancel.js
-  - core/
-    - Axios.js
+  - adapters/ 适配器相关.
+    - adapters.js // 提供获取适配器的方法，并返回适配器集合对象.
+    - http.js // node 环境使用内置的 http 模块.
+    - xhr.js // 浏览器环境使用 XMLHttpRequest 对象.
+  - cancel/ 取消请求相关.
+    - CanceledError.js // 成功取消请求时调用此构造函数.
+    - CancelToken.js // 取消请求类.
+    - isCancel.js // 判断请求是否已经取消.
+  - core/ 核心相关.
+    - Axios.js // 核心类.
     - AxiosError.js
     - AxiosHeaders.js
     - buildFullPath.js
-    - dispatchRequest.js
-    - InterceptorManager.js
-    - mergeConfig.js
+    - dispatchRequest.js // 使用传入的配置对象和选定的适配器发送请求.
+    - InterceptorManager.js // 拦截器管理器类.
+    - mergeConfig.js // 合并配置对象.
     - settle.js
     - transformData.js
-  - defaults/
-    - index.js
-    - transitional.js
+  - defaults/ 默认配置相关.
+    - index.js // 默认配置对象.
+    - transitional.js // .
   - env/
     - classes/FormData.js
     - data.js
@@ -64,7 +64,7 @@
         - URLSearchParams.js
       - index.js 
   - axios.js // 入口文件，返回 axios 函数（即绑定 Axios 实例上下文的 Axios.prototype.request 方法的包装函数），并在 axios 上挂载若干属性.
-  - utils.js // 通用工具、类型判断等方法函数.
+  - utils.js // 通用工具、类型判断等函数.
 ```
 
 ## 默认导出函数 axios

@@ -2,6 +2,8 @@
 
 基于 `v1.2.0` 版本进行分析.
 
+![axios](E:\workspace\source-code-analysis\axios\axios.svg)
+
 ## 目录结构
 
 ```markdown
@@ -323,3 +325,39 @@ request(configOrUrl, config) {
   /* --- 全同步请求拦截器的处理 end --- */
 }
 ```
+
+### 10个支持的请求方法
+
+```javascript
+// 这 10 个别名方法只是整理了一下配置对象，最终调用的还是 Axios.prototype.request 方法.
+utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
+  /*eslint func-names:0*/
+  Axios.prototype[method] = function(url, config) {
+    return this.request(mergeConfig(config || {}, {
+      method,
+      url,
+      data: (config || {}).data,
+    }));
+  };
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  function generateHTTPMethod(isForm) {
+    return function httpMethod(url, data, config) {
+      return this.request(mergeConfig(config || {}, {
+        method,
+        headers: isForm ? {
+          'Content-Type': 'multipart/form-data'
+        } : {},
+        url,
+        data,
+      }));
+    };
+  }
+
+  Axios.prototype[method] = generateHTTPMethod();
+
+  Axios.prototype[method + 'Form'] = generateHTTPMethod(true);
+});
+```
+如上述代码所示，目前支持的 10 个请求方法（delete、get、head、options、post、put、patch、postForm、putForm、patchForm）最终还是调用 Axios.prototype.request 方法，调用之前整合好配置对象.

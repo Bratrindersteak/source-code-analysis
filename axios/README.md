@@ -2,9 +2,9 @@
 
 基于 `v1.2.0` 版本进行分析.
 
-![axios](E:\workspace\source-code-analysis\axios\axios.svg)
+![axios](./axios.svg)
 
-## 目录结构
+## 1. 目录结构
 
 ```markdown
 - lib/
@@ -18,9 +18,9 @@
     - isCancel.js // 判断请求是否已经取消.
   - core/ 核心相关.
     - Axios.js // 核心类.
-    - AxiosError.js
-    - AxiosHeaders.js
-    - buildFullPath.js
+    - AxiosError.js // 错误构造函数.
+    - AxiosHeaders.js // 头类.
+    - buildFullPath.js // 将两段 URL 组合在一起返回.
     - dispatchRequest.js // 使用传入的配置对象和选定的适配器发送请求.
     - InterceptorManager.js // 拦截器管理器类.
     - mergeConfig.js // 合并配置对象.
@@ -37,7 +37,7 @@
     - AxiosURLSearchParams.js
     - bind.js // 返回一个包装函数，改变传入函数的上下文绑定.
     - buildURL.js
-    - combineURLs.js
+    - combineURLs.js // 拼接两段 url 为一个.
     - cookies.js
     - deprecatedMethod.js
     - formDataToJSON.js
@@ -69,11 +69,11 @@
   - utils.js // 通用工具、类型判断等函数.
 ```
 
-## 默认导出函数 axios
+## 2. 默认导出函数 axios
 
 文件位置：`lib/axios.js`
 
-### 创建 axios 函数
+### 2.1 创建 axios 函数
 
 ```javascript
 /**
@@ -109,7 +109,7 @@ function createInstance(defaultConfig) {
 const axios = createInstance(defaults);
 ```
 
-### 给 axios 函数挂载属性.
+### 2.2 给 axios 函数挂载属性.
 
 ```javascript
 // 挂载 Axios 类用于继承.
@@ -153,11 +153,11 @@ axios.formToJSON = thing => formDataToJSON(utils.isHTMLForm(thing) ? new FormDat
 axios.default = axios;
 ```
 
-## 核心类 Axios
+## 3. 核心类 Axios
 
 文件位置：`lib/core/Axios.js`
 
-### 构造器
+### 3.1 构造器
 
 ```javascript
 constructor(instanceConfig) {
@@ -172,7 +172,7 @@ constructor(instanceConfig) {
 }
 ```
 
-### 核心方法 Axios.prototype.request
+### 3.2 核心方法 Axios.prototype.request
 
 ```javascript
 /**
@@ -326,7 +326,7 @@ request(configOrUrl, config) {
 }
 ```
 
-### 10个支持的请求方法
+### 3.3 10个支持的请求方法
 
 ```javascript
 // 这 10 个别名方法只是整理了一下配置对象，最终调用的还是 Axios.prototype.request 方法.
@@ -361,3 +361,9 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 });
 ```
 如上述代码所示，目前支持的 10 个请求方法（delete、get、head、options、post、put、patch、postForm、putForm、patchForm）最终还是调用 Axios.prototype.request 方法，调用之前整合好配置对象.
+
+
+## 调用流程
+
+
+

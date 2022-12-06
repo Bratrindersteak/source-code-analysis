@@ -47,9 +47,9 @@ utils.inherits(AxiosError, Error, {
       // Axios
       config: utils.toJSONObject(this.config),
       code: this.code,
-      status: this.response && this.response.status ? this.response.status : null
+      status: this.response && this.response.status ? this.response.status : null,
     };
-  }
+  },
 });
 
 const prototype = AxiosError.prototype;

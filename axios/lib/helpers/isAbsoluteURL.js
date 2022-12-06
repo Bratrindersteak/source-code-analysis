@@ -1,11 +1,13 @@
 'use strict';
 
 /**
- * Determines whether the specified URL is absolute
+ *  判断一个 URL 是否是绝对的.
  *
- * @param {string} url The URL to test
+ *  以双斜杠 // 开头（双斜杠前可以有以字母开头后跟若干个字母、数字、加号、句号、连词符的标识符）的 URL 被认为是绝对 URL.
  *
- * @returns {boolean} True if the specified URL is absolute, otherwise false
+ * @param {string} url - 待判断的 URL.
+ *
+ * @returns {boolean} 判断结果.
  */
 export default function isAbsoluteURL(url) {
   // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).

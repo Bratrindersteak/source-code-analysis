@@ -19,7 +19,7 @@ function CanceledError(message, config, request) {
 }
 
 utils.inherits(CanceledError, AxiosError, {
-  __CANCEL__: true
+  __CANCEL__: true,
 });
 
 export default CanceledError;

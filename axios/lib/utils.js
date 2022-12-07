@@ -361,7 +361,7 @@ const inherits = (constructor, superConstructor, props, descriptors) => {
   // 若传入了 descriptors，则 descriptors 的属性作为新原型对象的属性.
   constructor.prototype = Object.create(superConstructor.prototype, descriptors);
 
-  // 纠正构造器属性.
+  // 赋值构造器属性.
   constructor.prototype.constructor = constructor;
 
   // 将 superConstructor 的原型对象赋值给 constructor 的 super 属性.

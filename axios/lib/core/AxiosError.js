@@ -30,6 +30,8 @@ function AxiosError(message, code, config, request, response) {
   response && (this.response = response);
 }
 
+// 将 Error 的原型对象作为 AxiosError 的新原型对象的原型对象.
+// 并且将 toJSON 方法挂到 AxiosError 的新原型对象上.
 utils.inherits(AxiosError, Error, {
   toJSON: function toJSON() {
     return {

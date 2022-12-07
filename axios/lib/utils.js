@@ -347,20 +347,29 @@ const stripBOM = (content) => {
 }
 
 /**
- * Inherit the prototype methods from one constructor into another
- * @param {function} constructor - .
- * @param {function} superConstructor - .
- * @param {object} [props] - .
- * @param {object} [descriptors] - .
+ * 将原型方法从一个构造函数继承到另一个构造函数.
  *
- * @returns {void}
+ * 即将 superConstructor 的原型对象作为 constructor 的原型对象的原型对象.
+ *
+ * @param {function} constructor - 待继承的构造函数.
+ * @param {function} superConstructor - 被继承的构造函数.
+ * @param {object} [props] - 可以添加额外的属性给 constructor 的原型对象.
+ * @param {object} [descriptors] - 可以添加额外的描述符对象属性给 constructor 的原型对象.
  */
 const inherits = (constructor, superConstructor, props, descriptors) => {
+  // 重构 constructor 的原型对象，将 superConstructor 的原型对象作为 constructor 的新原型对象的原型对象.
+  // 若传入了 descriptors，则 descriptors 的属性作为新原型对象的属性.
   constructor.prototype = Object.create(superConstructor.prototype, descriptors);
+
+  // 纠正构造器属性.
   constructor.prototype.constructor = constructor;
+
+  // 将 superConstructor 的原型对象赋值给 constructor 的 super 属性.
   Object.defineProperty(constructor, 'super', {
-    value: superConstructor.prototype
+    value: superConstructor.prototype,
   });
+
+  // 若传入了 props，则将 props 并入 constructor 的原型对象.
   props && Object.assign(constructor.prototype, props);
 }
 

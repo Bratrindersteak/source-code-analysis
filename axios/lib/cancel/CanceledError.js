@@ -18,6 +18,8 @@ function CanceledError(message, config, request) {
   this.name = 'CanceledError';
 }
 
+// 将 AxiosError 的原型对象作为 CanceledError 的新原型对象的原型对象.
+// 并且将 __CANCEL__ 属性挂到 CanceledError 的新原型对象上.
 utils.inherits(CanceledError, AxiosError, {
   __CANCEL__: true,
 });

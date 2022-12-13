@@ -1,6 +1,6 @@
 'use strict';
 
-import {VERSION} from '../env/data.js';
+import { VERSION } from '../env/data.js';
 import AxiosError from '../core/AxiosError.js';
 
 const validators = {};
@@ -33,7 +33,7 @@ validators.transitional = function transitional(validator, version, message) {
     if (validator === false) {
       throw new AxiosError(
         formatMessage(opt, ' has been removed' + (version ? ' in ' + version : '')),
-        AxiosError.ERR_DEPRECATED
+        AxiosError.ERR_DEPRECATED,
       );
     }
 
@@ -43,8 +43,8 @@ validators.transitional = function transitional(validator, version, message) {
       console.warn(
         formatMessage(
           opt,
-          ' has been deprecated since v' + version + ' and will be removed in the near future'
-        )
+          ' has been deprecated since v' + version + ' and will be removed in the near future',
+        ),
       );
     }
 
@@ -87,5 +87,5 @@ function assertOptions(options, schema, allowUnknown) {
 
 export default {
   assertOptions,
-  validators
+  validators,
 };

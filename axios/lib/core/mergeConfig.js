@@ -11,13 +11,23 @@ const headersToObject = (thing) => thing instanceof AxiosHeaders ? thing.toJSON(
  * @param {Object} config1 - 配置对象一.
  * @param {Object} config2 - 配置对象二.
  *
- * @returns {Object} New object resulting from merging config2 to config1.
+ * @returns {Object} 将 config2 合并到 config1 后的新对象 config.
  */
 export default function mergeConfig(config1, config2) {
   config2 = config2 || {};
 
+  // 新配置对象.
   const config = {};
 
+  /**
+   * .
+   *
+   * @param target
+   * @param source
+   * @param caseless
+   *
+   * @returns {{}|*}
+   */
   function getMergedValue(target, source, caseless) {
     if (utils.isPlainObject(target) && utils.isPlainObject(source)) {
       return utils.merge.call({caseless}, target, source);
@@ -29,7 +39,15 @@ export default function mergeConfig(config1, config2) {
     return source;
   }
 
-  // eslint-disable-next-line consistent-return
+  /**
+   * .
+   *
+   * @param a
+   * @param b
+   * @param caseless
+   *
+   * @returns {{}|*}
+   */
   function mergeDeepProperties(a, b, caseless) {
     if (!utils.isUndefined(b)) {
       return getMergedValue(a, b, caseless);
@@ -38,14 +56,28 @@ export default function mergeConfig(config1, config2) {
     }
   }
 
-  // eslint-disable-next-line consistent-return
+  /**
+   * .
+   *
+   * @param a
+   * @param b
+   *
+   * @returns {{}|*}
+   */
   function valueFromConfig2(a, b) {
     if (!utils.isUndefined(b)) {
       return getMergedValue(undefined, b);
     }
   }
 
-  // eslint-disable-next-line consistent-return
+  /**
+   * .
+   *
+   * @param a
+   * @param b
+   *
+   * @returns {{}|*}
+   */
   function defaultToConfig2(a, b) {
     if (!utils.isUndefined(b)) {
       return getMergedValue(undefined, b);
@@ -54,7 +86,15 @@ export default function mergeConfig(config1, config2) {
     }
   }
 
-  // eslint-disable-next-line consistent-return
+  /**
+   * .
+   *
+   * @param a
+   * @param b
+   * @param prop
+   *
+   * @returns {{}|*}
+   */
   function mergeDirectKeys(a, b, prop) {
     if (prop in config2) {
       return getMergedValue(a, b);
@@ -63,6 +103,7 @@ export default function mergeConfig(config1, config2) {
     }
   }
 
+  // .
   const mergeMap = {
     url: valueFromConfig2,
     method: valueFromConfig2,
@@ -94,6 +135,7 @@ export default function mergeConfig(config1, config2) {
     headers: (a, b) => mergeDeepProperties(headersToObject(a), headersToObject(b), true)
   };
 
+  // .
   utils.forEach(Object.keys(config1).concat(Object.keys(config2)), function computeConfigValue(prop) {
     const merge = mergeMap[prop] || mergeDeepProperties;
     const configValue = merge(config1[prop], config2[prop], prop);

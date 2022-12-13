@@ -54,13 +54,13 @@
     - toFormData.js
     - toURLEncodedForm.js
     - validator.js
-  - platform/
-    - browser/
+  - platform/ // 针对不同平台环境提供不同的环境属性.
+    - browser/ // 浏览器环境需要的属性.
       - classes/
         - FormData.js
         - URLSearchParams.js
       - index.js
-    - node/
+    - node/ // nodejs 环境需要的属性.
       - classes/
         - FormData.js
         - URLSearchParams.js

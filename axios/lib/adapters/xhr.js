@@ -241,20 +241,30 @@ export default isXHRAdapterSupported && function (config) {
       request.upload.addEventListener('progress', progressEventReducer(config.onUploadProgress));
     }
 
+    // 设置取消请求的回调.
     if (config.cancelToken || config.signal) {
-      // Handle cancellation
-      // eslint-disable-next-line func-names
+      // 取消请求的回调函数.
       onCanceled = cancel => {
         if (!request) {
           return;
         }
+
+        // 执行 reject 返回 Promise.
         reject(!cancel || cancel.type ? new CanceledError(null, config, request) : cancel);
+
+        // 调用 XMLHttpRequest 取消请求的原生方法.
         request.abort();
+
+        // 清空请求对象.
         request = null;
       };
 
+      // axios 自带的取消请求的配置项，订阅回调函数.
       config.cancelToken && config.cancelToken.subscribe(onCanceled);
+
+      // 以 fetch 的方式使用 AbortController 取消请求的配置项.
       if (config.signal) {
+        // 若已经是取消状态，则直接执行回调取消请求，否则声明一个取消监听器.
         config.signal.aborted ? onCanceled() : config.signal.addEventListener('abort', onCanceled);
       }
     }

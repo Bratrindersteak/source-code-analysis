@@ -13,11 +13,11 @@ import AxiosHeaders from './AxiosHeaders.js';
 const validators = validator.validators;
 
 /**
- * Create a new instance of Axios
+ * Axios类.
  *
- * @param {Object} instanceConfig The default config for the instance
+ * @param {Object} instanceConfig - 配置对象.
  *
- * @return {Axios} A new instance of Axios
+ * @returns {Axios} Axios实例对象.
  */
 class Axios {
   constructor(instanceConfig) {
@@ -182,11 +182,11 @@ class Axios {
   }
 
   /**
+   * 获取请求的完成地址.
    *
+   * @param {object} config - 配置对象.
    *
-   * @param config - .
-   *
-   * @returns {string|*} .
+   * @returns {string|*} 完成请求地址.
    */
   getUri(config) {
     config = mergeConfig(this.defaults, config);

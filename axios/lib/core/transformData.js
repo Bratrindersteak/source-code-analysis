@@ -5,12 +5,12 @@ import defaults from '../defaults/index.js';
 import AxiosHeaders from '../core/AxiosHeaders.js';
 
 /**
- * Transform the data for a request or a response
+ * Transform the data for a request or a response.
  *
- * @param {Array|Function} fns A single function or Array of functions
- * @param {?Object} response The response object
+ * @param {Array|Function} fns - A single function or Array of functions.
+ * @param {Object} [response] - The response object.
  *
- * @returns {*} The resulting transformed data
+ * @returns {*} The resulting transformed data.
  */
 export default function transformData(fns, response) {
   const config = this || defaults;

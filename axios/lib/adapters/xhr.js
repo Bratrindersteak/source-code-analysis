@@ -138,7 +138,7 @@ export default isXHRAdapterSupported && function (config) {
       request = null;
     }
 
-    // 优先使用 loadend 事件回调，否则使用 readystatechange 事件回调.
+    // 优先使用 loadend 事件执行回调，否则使用 readystatechange 事件回调代替.
     if ('onloadend' in request) {
       request.onloadend = onloadend;
     } else {
@@ -147,15 +147,15 @@ export default isXHRAdapterSupported && function (config) {
           return;
         }
 
-        // The request errored out and we didn't get a response, this will be
-        // handled by onerror instead
-        // With one exception: request that using file: protocol, most browsers
-        // will return status as 0 even though it's a successful request
+        // 由于在大多数浏览器中，使用 file 协议的请求即便成功 status 也会返回 0，
+        // 所以在这里做特殊判断，将 status 为 0 且并非 file 协议的请求忽略.
+        // 由 onerror 回调统一去处理它们.
         if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
           return;
         }
-        // readystate handler is calling before onerror or ontimeout handlers,
-        // so we should call onloadend on the next 'tick'
+
+        // 由于 readystatechange 事件的执行顺序早于 error 事件和 timeout 事件，
+        // 所以通过使用 setTimeout 将 onloadend 的执行放到下一轮来修正执行顺序.
         setTimeout(onloadend);
       };
     }
@@ -166,9 +166,10 @@ export default isXHRAdapterSupported && function (config) {
         return;
       }
 
+      // 执行 reject 返回 Promise.
       reject(new AxiosError('Request aborted', AxiosError.ECONNABORTED, config, request));
 
-      // Clean up request
+      // 清空请求对象.
       request = null;
     };
 
@@ -178,24 +179,30 @@ export default isXHRAdapterSupported && function (config) {
       // onerror should only fire if it's a network error
       reject(new AxiosError('Network Error', AxiosError.ERR_NETWORK, config, request));
 
-      // Clean up request
+      // 清空请求对象.
       request = null;
     };
 
     // 请求超时的回调.
     request.ontimeout = function handleTimeout() {
+      // 默认超时信息.
       let timeoutErrorMessage = config.timeout ? 'timeout of ' + config.timeout + 'ms exceeded' : 'timeout exceeded';
+
       const transitional = config.transitional || transitionalDefaults;
+
+      // 若配置传入了超时信息则覆盖默认的.
       if (config.timeoutErrorMessage) {
         timeoutErrorMessage = config.timeoutErrorMessage;
       }
+
+      // 执行 reject 返回 Promise.
       reject(new AxiosError(
         timeoutErrorMessage,
         transitional.clarifyTimeoutError ? AxiosError.ETIMEDOUT : AxiosError.ECONNABORTED,
         config,
         request));
 
-      // Clean up request
+      // 清空请求对象.
       request = null;
     };
 

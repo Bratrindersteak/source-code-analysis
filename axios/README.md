@@ -46,8 +46,8 @@
     - isAxiosError.js
     - isURLSameOrigin.js
     - null.js // 仅返回一个 null，目前未被使用.
-    - parseHeaders.js
-    - parseProtocol.js
+    - parseHeaders.js // 将 XMLHttpRequest.getAllResponseHeaders() 返回的 headers 字符串解析为 headers 对象.
+    - parseProtocol.js // 从请求的 URL 中解析出协议名称.
     - speedometer.js
     - spread.js
     - throttle.js

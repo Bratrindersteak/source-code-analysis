@@ -5,10 +5,27 @@ import parseHeaders from '../helpers/parseHeaders.js';
 
 const $internals = Symbol('internals');
 
+/**
+ * 标准化一个字符串，即去掉两端空格并全部转成小写.
+ *
+ * @private
+ *
+ * @param {string} header - 待标准化的字符串.
+ *
+ * @returns {string} 标准化后的字符串.
+ */
 function normalizeHeader(header) {
   return header && String(header).trim().toLowerCase();
 }
 
+/**
+ * 标准化属性值.
+ *
+ * @private
+ *
+ * @param {string|string[]} value - 待标准化的字符串或字符串数组.
+ * @returns {*|string} 标准化后的字符串或字符串数组.
+ */
 function normalizeValue(value) {
   if (value === false || value == null) {
     return value;
@@ -17,6 +34,15 @@ function normalizeValue(value) {
   return utils.isArray(value) ? value.map(normalizeValue) : String(value);
 }
 
+/**
+ * 将 token 字符串解析为 token 对象.
+ *
+ * @private
+ *
+ * @param {string} str - 待解析的 token 字符串.
+ *
+ * @returns {object} 解析后的 token 对象.
+ */
 function parseTokens(str) {
   const tokens = Object.create(null);
   const tokensRE = /([^\s,;=]+)\s*(?:=\s*([^,;]+))?/g;
@@ -74,26 +100,47 @@ class AxiosHeaders {
     headers && this.set(headers);
   }
 
+  /**
+   * .
+   *
+   * @param {object|string} header - .
+   * @param valueOrRewrite - .
+   * @param rewrite - .
+   *
+   * @returns {AxiosHeaders} .
+   */
   set(header, valueOrRewrite, rewrite) {
     const self = this;
 
+    /**
+     *
+     *
+     * @param _value
+     * @param _header
+     * @param _rewrite
+     */
     function setHeader(_value, _header, _rewrite) {
+      // 调用 normalizeHeader 方法处理 header，去掉两端空格并全部转成小写.
       const lHeader = normalizeHeader(_header);
 
       if (!lHeader) {
         throw new Error('header name must be a non-empty string');
       }
 
+      // 确保 header 存在于 this 对象中.
       const key = utils.findKey(self, lHeader);
 
+      // 设置 header 值于 this 中.
       if(!key || self[key] === undefined || _rewrite === true || (_rewrite === undefined && self[key] !== false)) {
         self[key || _header] = normalizeValue(_value);
       }
     }
 
+    // 遍历 headres 对象，逐个调用 setHeader 方法.
     const setHeaders = (headers, _rewrite) =>
       utils.forEach(headers, (_value, _header) => setHeader(_value, _header, _rewrite));
 
+    // 根据不同的 header 类型选择不同的方式.
     if (utils.isPlainObject(header) || header instanceof this.constructor) {
       setHeaders(header, valueOrRewrite)
     } else if(utils.isString(header) && (header = header.trim()) && !isValidHeaderName(header)) {

@@ -255,6 +255,14 @@ function forEach(obj, fn, { allOwnKeys = false } = {}) {
   }
 }
 
+/**
+ * 从传入的对象中寻找传入的键名.
+ *
+ * @param {object} obj - 对象.
+ * @param {string} key - 键名.
+ *
+ * @returns {string|null} 找到的键名或者 null.
+ */
 function findKey(obj, key) {
   key = key.toLowerCase();
   const keys = Object.keys(obj);

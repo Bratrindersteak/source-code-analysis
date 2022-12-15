@@ -100,9 +100,13 @@ function setProxy(options, configProxy, location) {
   };
 }
 
+// 判断当前环境是否支持使用 process 对象.
 const isHttpAdapterSupported = typeof process !== 'undefined' && utils.kindOf(process) === 'process';
 
-/*eslint consistent-return:0*/
+/**
+ * http 适配器函数.
+ * 只有在支持此适配器的环境中会才会返回适配器函数，不支持的环境只会返回 false.
+ */
 export default isHttpAdapterSupported && function httpAdapter(config) {
   return new Promise(function dispatchHttpRequest(resolvePromise, rejectPromise) {
     let data = config.data;

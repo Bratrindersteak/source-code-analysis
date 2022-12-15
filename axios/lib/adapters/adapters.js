@@ -41,6 +41,7 @@ export default {
     let adapter;
 
     // 遍历参数数组，取到第一个有效的适配器即跳出.
+    // 在浏览器环境中会取到 xhr 适配器，在 node 环境中会取到 http 适配器.
     for (let i = 0; i < length; i++) {
       nameOrAdapter = adapters[i];
       if((adapter = utils.isString(nameOrAdapter) ? knownAdapters[nameOrAdapter.toLowerCase()] : nameOrAdapter)) {
@@ -50,6 +51,7 @@ export default {
 
     /* --- 适配器合法性校验 start --- */
     if (!adapter) {
+      // 这里判断是否等于 false 是因为在浏览器环境中 http 适配器会取到 false，而在 node 环境中 xhr 适配器会取到 false.
       if (adapter === false) {
         throw new AxiosError(
           `Adapter ${nameOrAdapter} is not supported by the environment`,
@@ -64,6 +66,7 @@ export default {
       );
     }
 
+    // 适配器必须是函数类型.
     if (!utils.isFunction(adapter)) {
       throw new TypeError('adapter is not a function');
     }

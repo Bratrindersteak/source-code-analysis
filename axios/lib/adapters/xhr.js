@@ -55,7 +55,8 @@ function progressEventReducer(listener, isDownloadStream) {
 const isXHRAdapterSupported = typeof XMLHttpRequest !== 'undefined';
 
 /**
- *
+ * xhr 适配器函数.
+ * 只有在支持此适配器的环境中会才会返回适配器函数，不支持的环境只会返回 false.
  */
 export default isXHRAdapterSupported && function (config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -64,6 +65,9 @@ export default isXHRAdapterSupported && function (config) {
     const responseType = config.responseType;
     let onCanceled;
 
+    /**
+     * 取消 cancelToken 订阅以及移除 AbortController 的 abort 监听器.
+     */
     function done() {
       if (config.cancelToken) {
         config.cancelToken.unsubscribe(onCanceled);

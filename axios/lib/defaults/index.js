@@ -41,8 +41,10 @@ const defaults = {
 
   transitional: transitionalDefaults,
 
+  // 内置两个适配器，分别适用于浏览器环境和 node 环境.
   adapter: ['xhr', 'http'],
 
+  // 发送请求之前使用函数数组依次对 config.data 做处理.
   transformRequest: [function transformRequest(data, headers) {
     const contentType = headers.getContentType() || '';
     const hasJSONContentType = contentType.indexOf('application/json') > -1;
@@ -103,6 +105,7 @@ const defaults = {
     return data;
   }],
 
+  // 响应返回之前使用函数数组依次对 response.data 做处理.
   transformResponse: [function transformResponse(data) {
     const transitional = this.transitional || defaults.transitional;
     const forcedJSONParsing = transitional && transitional.forcedJSONParsing;
@@ -127,12 +130,10 @@ const defaults = {
     return data;
   }],
 
-  /**
-   * A timeout in milliseconds to abort a request. If set to 0 (default) a
-   * timeout is not created.
-   */
+  // 请求中止的超时毫秒数，默认值 0 表示不设置超时.
   timeout: 0,
 
+  // 以双重 cookie 验证方式防御跨站请求伪造的 cookie 键和 header 键.
   xsrfCookieName: 'XSRF-TOKEN',
   xsrfHeaderName: 'X-XSRF-TOKEN',
 

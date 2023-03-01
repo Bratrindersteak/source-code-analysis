@@ -278,7 +278,6 @@ class Axios {
       // 遍历响应拦截器堆栈，将每个响应拦截器的 fulfilled、rejected 回调函数依次存入 responseInterceptorChain 中.
       responseInterceptorChain.push(interceptor.fulfilled, interceptor.rejected);
     });
-    /* --- 拦截器处理 end --- */
 
     let promise;
     let i = 0;
@@ -331,7 +330,8 @@ class Axios {
     while (i < len) {
       promise = promise.then(responseInterceptorChain[i++], responseInterceptorChain[i++]);
     }
-
+    /* --- 全同步请求拦截器的处理 end --- */
+    
     return promise;
   }
 }

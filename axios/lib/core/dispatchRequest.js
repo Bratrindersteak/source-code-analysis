@@ -32,46 +32,56 @@ function throwIfCancellationRequested(config) {
  * @returns {Promise} The Promise to be fulfilled
  */
 export default function dispatchRequest(config) {
+  // 若已发送取消请求则报错返回.
   throwIfCancellationRequested(config);
 
+  // 格式化请求头.
   config.headers = AxiosHeaders.from(config.headers);
 
-  // Transform request data
+  // 转换请求数据.
   config.data = transformData.call(
     config,
     config.transformRequest
   );
 
+  // 给 post, put, patch 类型的请求设置 Content-Type.
   if (['post', 'put', 'patch'].indexOf(config.method) !== -1) {
     config.headers.setContentType('application/x-www-form-urlencoded', false);
   }
 
+  // 获取适配器函数.
   const adapter = adapters.getAdapter(config.adapter || defaults.adapter);
 
+  // 调用适配器发送请求并返回处理后的响应结果.
   return adapter(config).then(function onAdapterResolution(response) {
+    // 若已发送取消请求则报错返回.
     throwIfCancellationRequested(config);
 
-    // Transform response data
+    // 转换响应数据.
     response.data = transformData.call(
       config,
       config.transformResponse,
       response
     );
 
+    // 格式化响应头.
     response.headers = AxiosHeaders.from(response.headers);
 
     return response;
   }, function onAdapterRejection(reason) {
     if (!isCancel(reason)) {
+      // 若已发送取消请求则报错返回.
       throwIfCancellationRequested(config);
 
-      // Transform response data
       if (reason && reason.response) {
+        // 转换响应数据.
         reason.response.data = transformData.call(
           config,
           config.transformResponse,
           reason.response
         );
+
+        // 格式化响应头.
         reason.response.headers = AxiosHeaders.from(reason.response.headers);
       }
     }

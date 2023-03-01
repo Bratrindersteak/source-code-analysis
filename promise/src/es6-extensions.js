@@ -46,24 +46,38 @@ Promise.resolve = function (value) {
   return valuePromise(value);
 };
 
+/**
+ * 将可迭代对象或类数组对象转化为数组.
+ *
+ * @private
+ *
+ * @param {object|array} iterable - 待转化的可迭代对象或类数组对象.
+ *
+ * @returns {*[]} 转化好的数组.
+ */
 var iterableToArray = function (iterable) {
+  // 优先使用 Array.from 方法，此方法可接受数组、迭代对象、类数组对象.
   if (typeof Array.from === 'function') {
-    // ES2015+, iterables exist
     iterableToArray = Array.from;
     return Array.from(iterable);
   }
 
-  // ES5, only arrays and array-likes exist
+  // 否则使用 Array.prototype.slice 方法代替，此方法可接受数组、类数组对象，但不接受可迭代对象.
   iterableToArray = function (x) { return Array.prototype.slice.call(x); };
   return Array.prototype.slice.call(iterable);
 }
 
 Promise.all = function (arr) {
+  // 转换参数类型，将可迭代对象转化为数组.
   var args = iterableToArray(arr);
 
+  // 返回一个新的 promise 对象.
   return new Promise(function (resolve, reject) {
+    // 若参数长度为 0 则直接调用 resolve 返回空数组.
     if (args.length === 0) return resolve([]);
+
     var remaining = args.length;
+
     function res(i, val) {
       if (val && (typeof val === 'object' || typeof val === 'function')) {
         if (val instanceof Promise && val.then === Promise.prototype.then) {
@@ -92,6 +106,8 @@ Promise.all = function (arr) {
         resolve(args);
       }
     }
+
+    // 遍历参数数组依次执行.
     for (var i = 0; i < args.length; i++) {
       res(i, args[i]);
     }

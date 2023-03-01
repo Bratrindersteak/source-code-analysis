@@ -55,14 +55,18 @@ function Promise(fn) {
   if (typeof this !== 'object') {
     throw new TypeError('Promises must be constructed via new');
   }
+
   if (typeof fn !== 'function') {
     throw new TypeError('Promise constructor\'s argument is not a function');
   }
+
   this._deferredState = 0;
   this._state = 0;
   this._value = null;
   this._deferreds = null;
+
   if (fn === noop) return;
+
   doResolve(fn, this);
 }
 Promise._onHandle = null;
@@ -183,6 +187,15 @@ function finale(self) {
   }
 }
 
+/**
+ * Promise处理器的构造函数.
+ *
+ * @param {function} onFulfilled - .
+ * @param {function} onRejected - .
+ * @param {Promise} promise - .
+ *
+ * @constructor
+ */
 function Handler(onFulfilled, onRejected, promise){
   this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
   this.onRejected = typeof onRejected === 'function' ? onRejected : null;
@@ -197,17 +210,24 @@ function Handler(onFulfilled, onRejected, promise){
  */
 function doResolve(fn, promise) {
   var done = false;
+
   var res = tryCallTwo(fn, function (value) {
     if (done) return;
+
     done = true;
+
     resolve(promise, value);
   }, function (reason) {
     if (done) return;
+
     done = true;
+
     reject(promise, reason);
   });
+
   if (!done && res === IS_ERROR) {
     done = true;
+
     reject(promise, LAST_ERROR);
   }
 }

@@ -7,7 +7,7 @@ import AxiosError from "../core/AxiosError.js";
 const knownAdapters = {
   http: httpAdapter,
   xhr: xhrAdapter,
-}
+};
 
 // 给适配器函数添加 name 和 adapterName 字段属性.
 utils.forEach(knownAdapters, (fn, value) => {

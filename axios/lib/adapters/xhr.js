@@ -177,7 +177,7 @@ export default isXHRAdapterSupported && function (config) {
       request = null;
     };
 
-    // 取消出错的回调.
+    // 请求出错的回调.
     request.onerror = function handleError() {
       // Real errors are hidden from us by the browser
       // onerror should only fire if it's a network error
@@ -210,7 +210,7 @@ export default isXHRAdapterSupported && function (config) {
       request = null;
     };
 
-    // 给标准浏览器环境添加跨站请求伪造的头属性，这属于双重 cookie 验证方式.
+    // 给标准浏览器环境添加跨站请求伪造的头属性，此操作属于双重 cookie 验证方式.
     if (platform.isStandardBrowserEnv) {
       // 若允许跨源传递 cookie 或者本来就是同源请求，则读取 cookie 中对应的的属性住.
       const xsrfValue = (config.withCredentials || isURLSameOrigin(fullPath))

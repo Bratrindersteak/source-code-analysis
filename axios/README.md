@@ -339,18 +339,20 @@ class Axios {
 
 #### 实例方法 getUri
 
-获取 URL
+获取请求的完整 URL。
 
 ```typescript
-getUri(config) {
-  // 合并配置对象.
-  config = mergeConfig(this.defaults, config);
-  
-  // 构建完整请求路径.
-  const fullPath = buildFullPath(config.baseURL, config.url);
-  
-  // 构建 URL 并返回.
-  return buildURL(fullPath, config.params, config.paramsSerializer);
+class Axios {
+  getUri(config) {
+    // 合并配置对象.
+    config = mergeConfig(this.defaults, config);
+
+    // 构建完整请求路径.
+    const fullPath = buildFullPath(config.baseURL, config.url);
+    
+    // 构建 URL 并返回.
+    return buildURL(fullPath, config.params, config.paramsSerializer);
+  }
 }
 ```
 

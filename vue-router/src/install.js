@@ -28,25 +28,25 @@ export function install (Vue) {
       } else {
         this._routerRoot = (this.$parent && this.$parent._routerRoot) || this
       }
-      registerInstance(this, this)
+      registerInstance(this, this);
     },
     destroyed () {
-      registerInstance(this)
-    }
+      registerInstance(this);
+    },
   })
 
   Object.defineProperty(Vue.prototype, '$router', {
-    get () { return this._routerRoot._router }
-  })
+    get () { return this._routerRoot._router; },
+  });
 
   Object.defineProperty(Vue.prototype, '$route', {
-    get () { return this._routerRoot._route }
-  })
+    get () { return this._routerRoot._route; },
+  });
 
-  Vue.component('RouterView', View)
-  Vue.component('RouterLink', Link)
+  Vue.component('RouterView', View);
+  Vue.component('RouterLink', Link);
 
-  const strats = Vue.config.optionMergeStrategies
+  const strats = Vue.config.optionMergeStrategies;
   // use the same hook merging strategy for route hooks
-  strats.beforeRouteEnter = strats.beforeRouteLeave = strats.beforeRouteUpdate = strats.created
+  strats.beforeRouteEnter = strats.beforeRouteLeave = strats.beforeRouteUpdate = strats.created;
 }

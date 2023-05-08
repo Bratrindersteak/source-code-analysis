@@ -49,17 +49,24 @@ export default class VueRouter {
     this.afterHooks = []
     this.matcher = createMatcher(options.routes || [], this)
 
-    let mode = options.mode || 'hash'
-    this.fallback =
-      mode === 'history' && !supportsPushState && options.fallback !== false
-    if (this.fallback) {
-      mode = 'hash'
-    }
-    if (!inBrowser) {
-      mode = 'abstract'
-    }
-    this.mode = mode
+    /* 设置路由模式 start */
+    let mode = options.mode || 'hash'; // 默认 hash 模式.
 
+    this.fallback = mode === 'history' && !supportsPushState && options.fallback !== false;
+    // 降级处理，若选择了history模式但环境不支持 pushState 方法，则降级为 hash 模式.
+    if (this.fallback) {
+      mode = 'hash';
+    }
+
+    // 非浏览器环境使用抽象模式.
+    if (!inBrowser) {
+      mode = 'abstract';
+    }
+
+    this.mode = mode;
+    /* 设置路由模式 end */
+
+    // 根据路由模式设置 history 对象.
     switch (mode) {
       case 'history':
         this.history = new HTML5History(this, options.base)
